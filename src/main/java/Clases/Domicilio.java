@@ -13,30 +13,29 @@ public class Domicilio
     @Id
     @Columna(nombre = "id")
     private BigInteger id;
+    
     @Columna(nombre = "calle")
     private String calle;
+    
     @Columna(nombre = "altura")
     private Integer altura;
+    
     @Columna(nombre = "codigoPostal")
     private Integer codigoPostal;
+    
     @Columna(nombre = "localidad")
     private String localidad;
 
-    public Domicilio()
-    {
+    public Domicilio(){}
 
-    }
-
-    public Domicilio(String calle, Integer altura, Integer codigoPostal, String localidad)
-    {
+    public Domicilio(String calle, Integer altura, Integer codigoPostal, String localidad){
         this.calle = calle;
         this.altura = altura;
         this.codigoPostal = codigoPostal;
         this.localidad = localidad;
     }
 
-    public Domicilio(BigInteger id, String calle, Integer altura, Integer codigoPostal, String localidad)
-    {
+    public Domicilio(BigInteger id, String calle, Integer altura, Integer codigoPostal, String localidad){
         this.id = id;
         this.calle = calle;
         this.altura = altura;
@@ -44,60 +43,49 @@ public class Domicilio
         this.localidad = localidad;
     }
 
-    public BigInteger getId()
-    {
+    public BigInteger getId(){
         return id;
     }
 
-    public void setId(BigInteger id)
-    {
+    public void setId(BigInteger id){
         this.id = id;
     }
 
-    public String getCalle()
-    {
+    public String getCalle(){
         return calle;
     }
 
-    public void setCalle(String calle)
-    {
+    public void setCalle(String calle){
         this.calle = calle;
     }
 
-    public Integer getAltura()
-    {
+    public Integer getAltura(){
         return altura;
     }
 
-    public void setAltura(Integer altura)
-    {
+    public void setAltura(Integer altura){
         this.altura = altura;
     }
 
-    public Integer getCodigoPostal()
-    {
+    public Integer getCodigoPostal(){
         return codigoPostal;
     }
 
-    public void setCodigoPostal(Integer codigoPostal)
-    {
+    public void setCodigoPostal(Integer codigoPostal){
         this.codigoPostal = codigoPostal;
     }
 
-    public String getLocalidad()
-    {
+    public String getLocalidad(){
         return localidad;
     }
 
-    public void setLocalidad(String localidad)
-    {
+    public void setLocalidad(String localidad){
         this.localidad = localidad;
     }
 
     @Override
-    public String toString()
-    {
-        final StringBuilder sb = new StringBuilder("\'");
+    public String toString(){
+        StringBuilder sb = new StringBuilder("\'");
         sb.append(id).append('\'').append(",");
         sb.append('\'').append(calle).append('\'').append(",");
         sb.append('\'').append(altura).append('\'').append(",");
@@ -107,17 +95,23 @@ public class Domicilio
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (!(o instanceof Domicilio)) return false;
+    public boolean equals(Object o){
+    	
+        if (!(o instanceof Domicilio)) {
+        	return false;
+        }
+    	
+        if(this == o){
+        	return true;
+        }
+        
         Domicilio domicilio = (Domicilio) o;
+        
         return Objects.equals(getId(), domicilio.getId()) && Objects.equals(getCalle(), domicilio.getCalle()) && Objects.equals(getAltura(), domicilio.getAltura()) && Objects.equals(getCodigoPostal(), domicilio.getCodigoPostal()) && Objects.equals(getLocalidad(), domicilio.getLocalidad());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode(){
         return Objects.hash(getId(), getCalle(), getAltura(), getCodigoPostal(), getLocalidad());
     }
 }

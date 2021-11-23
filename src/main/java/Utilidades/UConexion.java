@@ -11,10 +11,9 @@ import org.json.simple.parser.ParseException;
 public class UConexion
 {
     private static UConexion instancia;
+    private static String CONFIG_FILE = "framework.properties.json";
     private Connection connection;
-    private static final String CONFIG_FILE = "framework.properties.json";
-
-
+    
     private UConexion(){
         try{
             JSONObject configuration = this.getConfiguration(CONFIG_FILE);
@@ -32,15 +31,13 @@ public class UConexion
     }
 
     public static UConexion getInstance(){
-        if(UConexion.instancia == null)
-        {
+        if(UConexion.instancia == null){
             UConexion.instancia = new UConexion();
         }
         return UConexion.instancia;
     }
 
-    private JSONObject getConfiguration(String file)
-    {
+    private JSONObject getConfiguration(String file){
         JSONParser jsonParser = new JSONParser();
 
         try(FileReader reader = new FileReader(file)){
@@ -56,6 +53,7 @@ public class UConexion
         catch (ParseException e){
             e.printStackTrace();
         }
+        
         return null;
     }
 

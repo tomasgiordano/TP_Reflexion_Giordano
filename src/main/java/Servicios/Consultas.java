@@ -19,114 +19,101 @@ public class Consultas
 {
     public static Object guardar(Object object)
     {
-        try
-        {
+        try{
             UBean ubean = new UBean();
+
             Tabla table = (Tabla) ubean.obtenerAnotaciones(object, Tabla.class);
             ArrayList<Field> atributos = ubean.obtenerAtributos(object);
+            
             String query = "INSERT INTO " + table.nombre();
-            String columns = " (";
-            String values = " (";
+            String columnas = " (";
+            String valores = " (";
 
-            for (Field atributo: atributos)
-            {
-                if(atributo.getAnnotation(Id.class) != null)
-                {
+            for (Field atributo: atributos){
+                if(atributo.getAnnotation(Id.class) != null){
                     continue;
                 }
                 System.out.println(atributo.getName());
                 Columna columna = atributo.getAnnotation(Columna.class);
-                columns += columna.nombre() + ",";
+                columnas += columna.nombre() + ",";
 
-                if(atributo.getAnnotation(Compuesto.class) != null)
-                {
+                if(atributo.getAnnotation(Compuesto.class) != null){
                     Object idAttribute = Consultas.guardarCompuesto(object,atributo);
-                    values += idAttribute + ",";
+                    valores += idAttribute + ",";
                 }
-                else if(atributo.getType().equals(Integer.class))
-                {
-                    values += ubean.ejecutarGet(object,atributo.getName()) + ",";
+                else if(atributo.getType().equals(Integer.class)){
+                    valores += ubean.ejecutarGet(object,atributo.getName()) + ",";
                 }
-                else
-                {
-                    values += "'" + ubean.ejecutarGet(object,atributo.getName()) + "',";
+                else{
+                    valores += "'" + ubean.ejecutarGet(object,atributo.getName()) + "',";
                 }
             }
-            columns = columns.substring(0,columns.length()-1);
-            columns += ") ";
-            values = values.substring(0,values.length()-1);
-            values += ")";
+            
+            columnas = columnas.substring(0,columnas.length()-1);
+            columnas += ") ";
+            
+            valores = valores.substring(0,valores.length()-1);
+            valores += ")";
 
-            query += columns + "VALUES" + values + ";";
+            query += columnas + "valores" + valores + ";";
             System.out.println(query);
 
             PreparedStatement insert = UConexion.getInstance().getConnection().prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             insert.execute();
+            
             ResultSet generatedKeys = insert.getGeneratedKeys();
-            if(generatedKeys.first())
-            {
-                for (Field attribute: atributos)
-                {
-                    if(attribute.getAnnotation(Id.class) != null)
-                    {
+            if(generatedKeys.first()){
+                for (Field attribute: atributos){
+                    if(attribute.getAnnotation(Id.class) != null){
                         object = ubean.ejecutarSet(object,attribute.getName(),generatedKeys.getObject(1));
                     }
                 }
             }
         }
-        catch (SQLException e)
-        {
+        catch (SQLException e){
             e.printStackTrace();
         }
-        catch (ClassCastException ex)
-        {
+        catch (ClassCastException ex){
             ex.printStackTrace();
         }
         return object;
     }
 
-    public static Object guardarModificar(Object object)
-    {
+    public static Object guardarModificar(Object object){
         UBean ubean = new UBean();
         ArrayList<Field> atributos = ubean.obtenerAtributos(object);
+       
         Object id = new Object();
 
-        for (Field atributo: atributos)
-        {
-            if(atributo.getAnnotation(Id.class) != null)
-            {
+        for (Field atributo: atributos){
+            if(atributo.getAnnotation(Id.class) != null){
                 id = ubean.ejecutarGet(object,atributo.getName());
             }
         }
-        if(Consultas.obtenerPorId(object.getClass(),id) != null)
-        {
+        if(Consultas.obtenerPorId(object.getClass(),id) != null){
             object = Consultas.modificar(object);
         }
-        else
-        {
+        else{
             object = Consultas.guardar(object);
         }
         return object;
     }
 
-    public static Object modificar(Object object)
-    {
-        try
-        {
+    public static Object modificar(Object object){
+        try{
             UBean ubean = new UBean();
             Tabla tabla = (Tabla) ubean.obtenerAnotaciones(object, Tabla.class);
             ArrayList<Field> atributos = ubean.obtenerAtributos(object);
 
             String query = "UPDATE " + tabla.nombre() + " SET ";
-
-            String filter = " WHERE ";
+            String filtro = " WHERE ";
 
             for (Field atributo: atributos)
             {
                 Columna columna = atributo.getAnnotation(Columna.class);
                 if(atributo.getAnnotation(Id.class) != null)
                 {
-                    filter += columna.nombre() +  " = '" + ubean.ejecutarGet(object,atributo.getName()) + "';";
+                    filtro += columna.nombre() +  " = '" + ubean.ejecutarGet(object,atributo.getName()) + "';";
                 }
                 else if(atributo.getClass().equals(Integer.class))
                 {
@@ -138,7 +125,7 @@ public class Consultas
                 }
             }
             query = query.substring(0,query.length()-1);
-            PreparedStatement update = UConexion.getInstance().getConnection().prepareStatement(query + filter);
+            PreparedStatement update = UConexion.getInstance().getConnection().prepareStatement(query + filtro);
 
             update.execute();
         }
@@ -163,9 +150,7 @@ public class Consultas
             
 
             @SuppressWarnings("rawtypes")
-			Optional<Constructor> constructor = Arrays.stream(constructores)
-                                                      .filter(con -> con.getParameterCount() == atributos.length)
-                                                      .findFirst();
+			Optional<Constructor> constructor = Arrays.stream(constructores).filter(con -> con.getParameterCount() == atributos.length).findFirst();
             Object[] parametros = constructor.get().getParameterTypes();
             
             String query = "SELECT ";
@@ -246,14 +231,15 @@ public class Consultas
         try
         {
             ArrayList<Object> list = new ArrayList<Object>();
+            
             @SuppressWarnings("unchecked")
 			Tabla table = (Tabla) clase.getAnnotation(Tabla.class);
             Field[] atributos = clase.getDeclaredFields();
+            
             Constructor[] constructores = clase.getConstructors();
-            Optional<Constructor> constructor = Arrays.stream(constructores)
-                                                      .filter(con -> con.getParameterCount() == atributos.length)
-                                                      .findFirst();
+            Optional<Constructor> constructor = Arrays.stream(constructores).filter(con -> con.getParameterCount() == atributos.length).findFirst();
             Object[] parametros = constructor.get().getParameterTypes();
+            
             String query = "SELECT * FROM " + table.nombre() + ";";
             System.out.println(query);
 

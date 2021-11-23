@@ -12,77 +12,66 @@ public class Perro
     @Id
     @Columna(nombre = "id")
     private int id;
+    
     @Columna(nombre = "raza")
     private String raza;
+    
     @Columna(nombre = "color")
     private String color;
+    
     @Columna(nombre = "nombre")
     private String nombre;
 
-    public Perro()
-    {
+    public Perro(){ }
 
-    }
-
-    public Perro(String raza, String color, String nombre)
-    {
+    public Perro(String raza, String color, String nombre){
         this.raza = raza;
         this.color = color;
         this.nombre = nombre;
     }
 
-    public Perro(int id, String raza, String color, String nombre)
-    {
+    public Perro(int id, String raza, String color, String nombre){
         this.id = id;
         this.raza = raza;
         this.color = color;
         this.nombre = nombre;
     }
 
-    public int getId()
-    {
+    public int getId(){
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id){
         this.id = id;
     }
 
-    public String getRaza()
-    {
+    public String getRaza(){
         return raza;
     }
 
-    public void setRaza(String raza)
-    {
+    public void setRaza(String raza){
         this.raza = raza;
     }
 
-    public String getColor()
-    {
+    public String getColor(){
         return color;
     }
 
-    public void setColor(String color)
-    {
+    public void setColor(String color){
         this.color = color;
     }
 
-    public String getNombre()
-    {
+    public String getNombre(){
         return nombre;
     }
 
-    public void setNombre(String nombre)
-    {
+    public void setNombre(String nombre){
         this.nombre = nombre;
     }
 
     @Override
-    public String toString()
-    {
-        final StringBuilder sb = new StringBuilder("Perro{");
+    public String toString(){
+        StringBuilder sb = new StringBuilder("Perro{");
         sb.append("id=").append(id);
         sb.append(", raza='").append(raza).append('\'');
         sb.append(", color='").append(color).append('\'');
@@ -92,17 +81,23 @@ public class Perro
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (!(o instanceof Perro)) return false;
+    public boolean equals(Object o){
+    	
+        if(!(o instanceof Perro)) {
+        	return false;
+        }
+        
+        if(this == o) {
+        	return true;
+        }
+
         Perro perro = (Perro) o;
+        
         return Objects.equals(getId(), perro.getId()) && Objects.equals(getRaza(), perro.getRaza()) && Objects.equals(getColor(), perro.getColor()) && Objects.equals(getNombre(), perro.getNombre());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode(){
         return Objects.hash(getId(), getRaza(), getColor(), getNombre());
     }
 }
