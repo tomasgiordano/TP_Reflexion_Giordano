@@ -1,0 +1,6 @@
+{  
+  "USER" : "root",
+  "PASSWORD" : "",
+  "DRIVER" : "com.mysql.cj.jdbc.Driver",
+  "DB" : "jdbc:mysql://localhost:3306/test"
+}
